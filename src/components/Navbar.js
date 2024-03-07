@@ -21,13 +21,10 @@ const Navbar = () => {
                         <div className="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                                 <li className="nav-item">
-                                    <NavLink className="nav-link active" aria-current="page" to="#">Home</NavLink>
+                                    <NavLink  to="/" className="nav-link active" aria-current="page">Home</NavLink>
                                 </li>
                                 <li className="nav-item">
-                                    <NavLink className="nav-link" to="#">Link</NavLink>
-                                </li>
-                                <li className="nav-item">
-                                    <NavLink className="nav-link disabled" aria-disabled="true">Disabled</NavLink>
+                                    <NavLink to="/read" className="nav-link" >All Post</NavLink>
                                 </li>
                             </ul>
                             <form className="d-flex" role="search">

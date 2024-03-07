@@ -1,28 +1,34 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createUser } from '../features/userDetails';
-
+import { useNavigate } from 'react-router-dom';
 const Create = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [users, setUsers] = useState({
         name: '',
         email: '',
         age: '',
-        gender: ''
     })
     const getUserData = (e) => {
         const name = e.target.name;
         const value = e.target.value;
-        setUsers((prev) => ({ ...prev, [name]: value }))
+        setUsers(({ ...users, [name]: value }))
     }
     const submitHandler = (e) => {
         console.log(users)
         e.preventDefault();
         dispatch(createUser(users))
+        // setUsers({
+        //     name: '',
+        //     email: '',
+        //     age: '',
+        // })
+       navigate('/read');
     }
     return (
         <>
-            <form className='w-50 mx-auto' onClick={submitHandler}>
+            <form className='w-50 mx-auto' >
                 <div className="mb-3">
                     <label
                         htmlFor="name"
@@ -78,7 +84,7 @@ const Create = () => {
                         onChange={getUserData}
                         id="flexCheckDefault"
                         name='gender'
-                        value={users.gender}
+                        value="Male"
                     />
                     <label
                         className="form-check-label"
@@ -91,10 +97,10 @@ const Create = () => {
                     <input
                         className="form-check-input"
                         type="radio"
-                        value={users.gender}
                         onChange={getUserData}
                         id="flexCheckChecked"
                         name='gender'
+                        value="Female"
                     />
                     <label
                         className="form-check-label"
@@ -103,7 +109,7 @@ const Create = () => {
                         Female
                     </label>
                 </div><br />
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <button type="submit" className="btn btn-primary" onClick={submitHandler}>Submit</button>
             </form>
         </>
     )

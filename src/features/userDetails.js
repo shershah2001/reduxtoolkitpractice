@@ -24,6 +24,18 @@ export const createUser = createAsyncThunk('createUser', async (data, { rejectWi
     return rejectWithValue(error)
   }
 })
+export const showUser = createAsyncThunk('showUser', async (args, { rejectWithValue }) => {
+  try {
+    const res = await fetch('https://65ddeb7edccfcd562f55d491.mockapi.io/crud');
+    if (!res.ok) {
+      throw new Error(`HTTP error! status ${res.status}`);
+    }
+    const data = await res.json();
+    return data
+  } catch (error) {
+    return rejectWithValue(error)
+  }
+})
 
 const userDetails = createSlice({
   name: 'userDetails',
@@ -32,20 +44,32 @@ const userDetails = createSlice({
     loading: false,
     error: null,
   },
-extraReducers(builder){
-  builder
-  .addCase(createUser.pending, (state)=>{
-    state.loading = true;
-    state.error = null
-  })
-  .addCase(createUser.fulfilled,(state,action)=>{
-    state.loading = false;
-    state.user.push(action.payload)
-  })
-  .addCase(createUser.rejected,(state,action)=>{
-    state.loading = false;
-    state.error = action.payload;
-  })
-}
+  extraReducers(builder) {
+    builder
+      .addCase(createUser.pending, (state) => {
+        state.loading = true;
+        state.error = null
+      })
+      .addCase(createUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user.push(action.payload)
+      })
+      .addCase(createUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(showUser.pending, (state) => {
+        state.loading = true;
+        state.error = null
+      })
+      .addCase(showUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload
+      })
+      .addCase(showUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+  }
 })
 export default userDetails.reducer;
