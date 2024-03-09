@@ -1,35 +1,37 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { createUser } from '../features/userDetails';
-import { useNavigate } from 'react-router-dom';
-const Create = () => {
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { editUser } from '../features/userDetails';
+import { useNavigate, useParams } from 'react-router-dom';
+
+const EditData = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [users, setUsers] = useState({
-        name: '',
-        email: '',
-        age: '',
-    })
-    const getUserData = (e) => {
+    const { user, loading } = useSelector((state) => state.user)
+    const { id } = useParams();
+    const userfind = user.find((ele) => ele.id === id)
+    const [findUsers, setFindUsers] = useState()
+    useEffect(() => {
+        setFindUsers(userfind)
+    },[])
+    const findUserData = (e) => {
         const name = e.target.name;
         const value = e.target.value;
-        setUsers(({ ...users, [name]: value }))
+        setFindUsers(({...findUsers, [name]:value}))
     }
     const submitHandler = (e) => {
-        console.log(users)
+        // console.log(users)
         e.preventDefault();
-        dispatch(createUser(users))
+        dispatch(editUser(findUsers))
         // setUsers({
         //     name: '',
         //     email: '',
         //     age: '',
         // })
-       navigate('/read');
+        navigate('/read');
     }
     return (
-        <>
-          <h1 className='text-center'>Home</h1>
-            <form className='w-50 mx-auto' onSubmit={submitHandler}>
+        <div>
+            <form className='w-50 mx-auto' >
                 <div className="mb-3">
                     <label
                         htmlFor="name"
@@ -40,10 +42,10 @@ const Create = () => {
                     <input
                         type="text"
                         className="form-control"
-                        onChange={getUserData}
+                        onChange={findUserData}
                         id="name"
                         name='name'
-                        value={users.name}
+                        value={findUsers && findUsers.name}
                     />
                 </div>
                 <div className="mb-3">
@@ -55,11 +57,12 @@ const Create = () => {
                     <input
                         type="email"
                         className="form-control"
-                        onChange={getUserData}
+                        onChange={findUserData}
                         id="exampleInputEmail1"
                         aria-describedby="emailHelp"
                         name="email"
-                        value={users.email}
+                        value={findUsers && findUsers.email}
+                        checked
                     />
                 </div>
                 <div className="mb-3">
@@ -72,20 +75,21 @@ const Create = () => {
                     <input
                         type="text"
                         className="form-control"
-                        onChange={getUserData}
+                        onChange={findUserData}
                         id="age"
                         name='age'
-                        value={users.age}
+                        value={findUsers && findUsers.age}
                     />
                 </div>
                 <div className="form-check">
                     <input
                         className="form-check-input"
                         type="radio"
-                        onChange={getUserData}
+                        onChange={findUserData}
                         id="flexCheckDefault"
                         name='gender'
                         value="Male"
+                        checked={findUsers && findUsers.gender === 'Male'}
                     />
                     <label
                         className="form-check-label"
@@ -98,10 +102,11 @@ const Create = () => {
                     <input
                         className="form-check-input"
                         type="radio"
-                        onChange={getUserData}
+                        onChange={findUserData}
                         id="flexCheckChecked"
                         name='gender'
                         value="Female"
+                        checked={findUsers && findUsers.gender === 'Female'}
                     />
                     <label
                         className="form-check-label"
@@ -109,12 +114,11 @@ const Create = () => {
                     >
                         Female
                     </label>
-                </div>
-                <br />
-                <button type="submit" className="btn btn-primary" >Submit</button>
+                </div><br />
+                <button type="submit" className="btn btn-primary" onClick={submitHandler}>Submit</button>
             </form>
-        </>
+        </div>
     )
 }
 
-export default Create
+export default EditData;
